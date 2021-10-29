@@ -12,9 +12,11 @@ const sql = postgres(process.env.DATABASE_URL, {
   },
 });
 
-const testDBConnection = () => {
+const testDBConnection = async () => {
   sql`SELECT 1+1 AS result`
-    .then(() => console.log("Connected to postgres"))
+    .then(() => {
+      console.log("Connected to postgres");
+    })
     .catch((err) => {
       if (!IN_PROD) throw Error(err);
       console.log(err);
@@ -26,6 +28,7 @@ const closeDBConnection = () => {
 };
 
 module.exports = {
+  sql,
   testDBConnection,
   closeDBConnection,
 };

@@ -24,11 +24,20 @@ exports.up = (pgm) => {
       references: 'loans("id")',
       comment: "The Unique id of the loan",
     },
-    date: {
-      type: "DATE",
+    payment_amount: {
+      type: "VARCHAR(250)",
       notNull: true,
-      references: 'loans("updated_at")',
-      comment: "The date of the payment",
+      comment: "The amount just paid",
+    },
+    amount_repaid: {
+      type: "VARCHAR(250)",
+      notNull: true,
+      comment: "The amount repaid in total",
+    },
+    amount_left: {
+      type: "VARCHAR(250)",
+      notNull: true,
+      comment: "The amount left in total",
     },
     created_at: {
       type: "timestamp",

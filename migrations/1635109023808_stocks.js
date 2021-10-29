@@ -17,7 +17,7 @@ exports.up = (pgm) => {
       comment: "The Unique symbol of a stock",
     },
     price_per_share: {
-      type: "INT",
+      type: "VARCHAR(250)",
       notNull: true,
       comment: "The amount of a loan",
     },

@@ -52,7 +52,7 @@ exports.up = (pgm) => {
       comment: "The bank username of a user",
     },
     portfolio_value: {
-      type: "INT",
+      type: "VARCHAR(250)",
       comment: "The porfolio value of a user",
     },
     date_of_birth: {

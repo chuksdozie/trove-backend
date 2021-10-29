@@ -19,33 +19,44 @@ exports.up = (pgm) => {
       comment: "The Unique id of the user",
     },
     loan_amount: {
-      type: "INT",
+      type: "VARCHAR(250)",
       notNull: true,
       comment: "The amount of a loan",
     },
     amount_repaid: {
-      type: "INT",
+      type: "VARCHAR(250)",
       notNull: true,
       comment: "The amount of a loan that has been repaid",
     },
     amount_left: {
-      type: "INT",
+      type: "VARCHAR(250)",
       notNull: true,
       comment: "The amount of a loan that is left to be paid",
     },
     payment_per_month: {
-      type: "INT",
+      type: "VARCHAR(250)",
       notNull: true,
       comment: "The amount of a loan that will be paid per month",
     },
     duration: {
-      type: "INT",
+      type: "VARCHAR(250)",
       notNull: true,
       comment: "The loan payment duration",
     },
-    duration_left: {
-      type: "INT",
+    duration_spent: {
+      type: "VARCHAR(250)",
       notNull: true,
+      comment: "The loan payment duration spent",
+    },
+    duration_left: {
+      type: "VARCHAR(250)",
+      notNull: true,
+      comment: "The loan payment duration left",
+    },
+    active: {
+      type: "BOOL",
+      notNull: true,
+      default: false,
       comment: "The loan payment duration left",
     },
     created_at: {

@@ -25,12 +25,12 @@ exports.up = (pgm) => {
       comment: "The stock from stocks",
     },
     total_quantity: {
-      type: "INT",
+      type: "VARCHAR(250)",
       notNull: true,
       comment: "number of stocks",
     },
     equity_value: {
-      type: "INT",
+      type: "VARCHAR(250)",
       notNull: true,
       comment: "value of that stock( total quantity x price per share)",
     },
