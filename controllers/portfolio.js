@@ -8,7 +8,6 @@ const getPortfolioByUserId = async (users_id) => {
   try {
     const id = users_id.id;
     const portfolios = await getPortfolioByUserIdQuery(id);
-    console.log(portfolios);
     return portfolios;
   } catch (error) {
     console.error(error);

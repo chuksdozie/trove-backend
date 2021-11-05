@@ -1,6 +1,7 @@
 var express = require("express");
 var router = express.Router();
 var httpStatus = require("http-status");
+const { isLoggedIn } = require("../middlewares/index");
 
 const {
   signUpUser,
@@ -8,6 +9,7 @@ const {
   updateUserById,
   changePasswordUserById,
 } = require("../controllers/auth");
+const { errors } = require("postgres/lib/types");
 
 /* GET users listing. */
 router.post("/signup", async function (req, res, next) {
@@ -55,10 +57,11 @@ router.post("/login", async function (req, res, next) {
   } catch (error) {
     console.error(error);
     next(error);
+    return;
   }
 });
 
-router.put("/update/:id", async function (req, res, next) {
+router.put("/update/:id", isLoggedIn, async function (req, res, next) {
   try {
     const id = req.params;
     const {
@@ -88,7 +91,7 @@ router.put("/update/:id", async function (req, res, next) {
   }
 });
 
-router.put("/change-password/:id", async function (req, res, next) {
+router.put("/change-password/:id", isLoggedIn, async function (req, res, next) {
   try {
     const id = req.params;
     const { old_password, new_password, confirm_new_password } = req.body;

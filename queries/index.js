@@ -181,7 +181,8 @@ const addNewLoanHistoryQuery = async (payload) => {
 
 const getLoanHistoryByUserIdQuery = async (id) => {
   return await sql`SELECT * FROM loanhistory
-  WHERE user_id = ${id}`;
+  WHERE user_id = ${id}
+  ORDER BY created_at DESC`;
 };
 
 module.exports = {

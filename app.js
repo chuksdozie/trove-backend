@@ -1,4 +1,5 @@
 require("dotenv").config();
+var cors = require("cors");
 var createError = require("http-errors");
 var express = require("express");
 var path = require("path");
@@ -11,15 +12,6 @@ var userRouter = require("./routes/user");
 var loanRouter = require("./routes/loan");
 var portfolioRouter = require("./routes/portfolio");
 const { testDBConnection } = require("./stores/database.js");
-const {
-  runner,
-  signUpUserQuery,
-  loginUserQuery,
-  getUserPhoneQuery,
-  getStockBySymbolQuery,
-} = require("./queries/index.js");
-
-// const { createInitialStocks } = require("./controllers/stocks");
 
 var app = express();
 
@@ -28,6 +20,7 @@ app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "jade");
 
 app.use(logger("dev"));
+app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
@@ -44,12 +37,6 @@ app.use(function (req, res, next) {
   next(createError(404));
 });
 
-// createInitialStocks();
-
-// test database connection
-// runner();
-getUserPhoneQuery("08160525401");
-// loginUserQuery("isco.com");
 // testDBConnection();
 
 // error handler

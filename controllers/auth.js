@@ -39,6 +39,22 @@ const signUpUser = async (payload) => {
       });
     }
 
+    if (payload.bank_account_number.length !== 10) {
+      throw new APIError({
+        status: httpStatus.BAD_REQUEST,
+        message: "Account Number is incorrect",
+        errors: "Account Number is incorrect",
+      });
+    }
+
+    if (isNaN(payload.bank_account_number)) {
+      throw new APIError({
+        status: httpStatus.BAD_REQUEST,
+        message: "Account Number is incorrect",
+        errors: "Account Number is incorrect",
+      });
+    }
+
     const hashedpassword = await argon2.hash(payload.password);
     const details = {
       first_name: payload.first_name,
@@ -53,9 +69,7 @@ const signUpUser = async (payload) => {
     };
     const [data] = await signUpUserQuery(details);
     await addPortfolioPosition(data.id);
-    console.log("heloooooo", data.id);
     sendMail(reciever, mailSubject, mailContent);
-    console.log(data);
     return data;
   } catch (error) {
     throw new APIError({
@@ -83,8 +97,6 @@ const loginUser = async (payload) => {
     const password = await payload.password;
     const hashedPassword = await userDetails.password;
 
-    console.log(password);
-    console.log(hashedPassword);
     if (await argon2.verify(hashedPassword, password)) {
       const token = jwt.sign(
         {
@@ -94,6 +106,7 @@ const loginUser = async (payload) => {
         process.env.JWT_SECRET,
         { expiresIn: "3d" }
       );
+      return { userDetails, token };
     } else {
       throw new APIError({
         status: httpStatus.BAD_REQUEST,
@@ -101,7 +114,6 @@ const loginUser = async (payload) => {
         message: "Incorrect Credentials, Please check and try again",
       });
     }
-    return { userDetails, token };
   } catch (error) {
     console.error(error);
     throw new APIError({
@@ -117,12 +129,27 @@ const updateUserById = async (user, payload) => {
   try {
     const id = user.id;
     const [userInfo] = await getUserByIdQuery(id);
-    console.log(userInfo, "HELLLLLL");
     if (!userInfo) {
       throw new APIError({
         status: httpStatus.BAD_REQUEST,
         message: "User does not exist",
         errors: "User does not exist",
+      });
+    }
+
+    if (payload.bank_account_number.length !== 10) {
+      throw new APIError({
+        status: httpStatus.BAD_REQUEST,
+        message: "Account Number is incorrect",
+        errors: "Account Number is incorrect",
+      });
+    }
+
+    if (isNaN(payload.bank_account_number)) {
+      throw new APIError({
+        status: httpStatus.BAD_REQUEST,
+        message: "Account Number is incorrect",
+        errors: "Account Number is incorrect",
       });
     }
 

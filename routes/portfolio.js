@@ -1,9 +1,10 @@
 var express = require("express");
 var router = express.Router();
 var httpStatus = require("http-status");
+const { isLoggedIn } = require("../middlewares/index");
 const { getPortfolioByUserId } = require("../controllers/portfolio");
 
-router.get("/portfolios/:id", async function (req, res, next) {
+router.get("/portfolios/:id", isLoggedIn, async function (req, res, next) {
   try {
     const id = req.params;
     const data = await getPortfolioByUserId(id);

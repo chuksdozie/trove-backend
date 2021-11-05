@@ -14,7 +14,6 @@ const httpStatus = require("http-status");
 const { now } = require("../utils/index");
 
 const takeALoan = async (payload) => {
-  console.log(await getActiveLoanByUserIdQuery());
   try {
     const { user_id } = await payload.user_id;
     const [user] = await getUserByIdQuery(user_id);
@@ -59,11 +58,9 @@ const takeALoan = async (payload) => {
       });
     }
     const availableCash = available.portfolio_value;
-    console.log(availableCash, "money");
 
     // check if user already has an active loan
     const loanExists = await getLoanByUserIdQuery(user_id);
-    console.log(loanExists, "loaner");
     if (loanExists) {
       for (let i = 0; i < loanExists.length; i++) {
         if (loanExists[i].active === true) {
@@ -159,14 +156,6 @@ const takeMonthlyPayment = async (user_id) => {
         amount_repaid = amount_repaid + payment_per_month;
         duration_left = duration_left - 1;
         duration_spent = duration_spent + 1;
-
-        console.log(loan_amount);
-        console.log(amount_left);
-        console.log(amount_repaid);
-        console.log(duration);
-        console.log(duration_left);
-        console.log(duration_spent);
-
         const pay = {
           user_id: user_id,
           loan_id: loan_id,
@@ -185,10 +174,8 @@ const takeMonthlyPayment = async (user_id) => {
         };
 
         let updatedLoan = await updateLoanQuery(loan_id, payLoan);
-        console.log(updatedLoan);
 
         let history = await addNewLoanHistoryQuery(pay);
-        console.log(history);
       } else {
         active = false;
         payLoan = {
@@ -199,14 +186,12 @@ const takeMonthlyPayment = async (user_id) => {
           duration_spent: duration_spent,
           updated_at: now(),
         };
-        console.log("debt cleared");
         let updatedLoan = await updateLoanQuery(loan_id, payLoan);
-        console.log(updatedLoan);
         clearInterval(monthly);
       }
     };
 
-    var monthly = setInterval(run, 3000);
+    var monthly = setInterval(run, 180000);
     const final = await getLoanByUserIdQuery(user_id);
     return final;
   } catch (error) {
@@ -221,8 +206,7 @@ const takeMonthlyPayment = async (user_id) => {
 const getActiveLoanByUserId = async (users_id) => {
   try {
     const id = users_id.id;
-    const activeLoan = await getActiveLoanByUserIdQuery(id);
-    console.log(activeLoan);
+    const [activeLoan] = await getActiveLoanByUserIdQuery(id);
     return activeLoan;
   } catch (error) {
     console.error(error);
@@ -238,10 +222,8 @@ const getLoanHistoryByUserId = async (users_id) => {
   try {
     const id = users_id.id;
     const loanHistory = await getLoanHistoryByUserIdQuery(id);
-    console.log(loanHistory);
     return loanHistory;
   } catch (error) {
-    console.error(error);
     throw new APIError({
       status: error.status || httpStatus.INTERNAL_SERVER_ERROR,
       errors: error,
